@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/models/user/create.dto';
-import { User } from 'src/types';
+import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
+import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
+import { CreateUserDto } from 'src/models/user/create-user.dto';
+import { Artist, User } from 'src/types';
 import * as uuid from 'uuid';
 
 @Injectable()
@@ -21,6 +23,19 @@ export class DatabaseService {
       version: 1,
       createdAt: Date.now(),
       updatedAt: null,
+    },
+  ];
+
+  private artists: Artist[] = [
+    {
+      id: 'b32838d8-f14c-4341-931a-8fb016ec60ef',
+      name: 'artist1',
+      grammy: true,
+    },
+    {
+      id: 'f4b7d85d-8c5c-4dc6-a473-bdc8944187b4',
+      name: 'artist2',
+      grammy: false,
     },
   ];
 
@@ -73,6 +88,55 @@ export class DatabaseService {
   async deleteUser(id: string): Promise<string> {
     return new Promise((res) => {
       this.users = this.users.filter((user) => user.id !== id);
+
+      res(id);
+    });
+  }
+
+  async getAllArtists(): Promise<Artist[]> {
+    return new Promise((res) => {
+      res(this.artists);
+    });
+  }
+
+  async findArtist(id: string): Promise<Artist> {
+    return await new Promise((res) => {
+      const artist = this.artists.find((artist) => artist.id === id);
+
+      res(artist);
+    });
+  }
+
+  async createArtist(dto: CreateArtistDto): Promise<Artist> {
+    return new Promise((res) => {
+      const artist: Artist = {
+        id: uuid.v4(),
+        ...dto,
+      };
+
+      this.artists.push(artist);
+
+      res(artist);
+    });
+  }
+
+  async updateArtist(id: string, dto: UpdateArtistDto): Promise<Artist> {
+    return new Promise(async (res) => {
+      const artist = await this.findArtist(id);
+
+      for (const key in dto) {
+        if (key !== 'id') {
+          artist[key] = dto[key];
+        }
+      }
+
+      res(artist);
+    });
+  }
+
+  async deleteArtist(id: string): Promise<string> {
+    return new Promise((res) => {
+      this.artists = this.artists.filter((artist) => artist.id !== id);
 
       res(id);
     });

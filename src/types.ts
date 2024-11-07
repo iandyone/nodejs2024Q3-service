@@ -6,3 +6,9 @@ export interface User {
   createdAt: number; // timestamp of creation
   updatedAt: number; // timestamp of last update
 }
+
+export interface Artist {
+  id: string; // uuid v4
+  name: string;
+  grammy: boolean;
+}

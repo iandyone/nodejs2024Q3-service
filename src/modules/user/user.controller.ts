@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { UpdateUserPassDto } from 'src/models/user/update-password.dto';
-import { CreateUserDto } from 'src/models/user/create.dto';
+import { CreateUserDto } from 'src/models/user/create-user.dto';
 
 @Controller('user')
 export class UserController {

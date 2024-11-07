@@ -4,8 +4,8 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { CreateUserDto } from 'src/models/user/create.dto';
-import { UserResponseDto } from 'src/models/user/response.dto';
+import { CreateUserDto } from 'src/models/user/create-user.dto';
+import { UserResponseDto } from 'src/models/user/user-response.dto';
 import { UpdateUserPassDto } from 'src/models/user/update-password.dto';
 import { DatabaseService } from 'src/modules/database/database.service';
 import { User } from 'src/types';
