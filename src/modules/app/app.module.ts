@@ -6,12 +6,14 @@ import { UsersModule } from 'src/modules/users/users.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { ArtistsModule } from '../artists/artists.module';
 import { TracksModule } from 'src/modules/tracks/tracks.module';
+import { AlbumsModule } from '../albums/albums.module';
 
 @Module({
   imports: [
     UsersModule,
     ArtistsModule,
     TracksModule,
+    AlbumsModule,
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,

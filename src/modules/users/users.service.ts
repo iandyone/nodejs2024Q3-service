@@ -15,7 +15,7 @@ import * as uuid from 'uuid';
 export class UsersService {
   constructor(private readonly database: DatabaseService) {}
 
-  async findOneUser(id: string) {
+  async findUserById(id: string) {
     const isUserIdValid = uuid.validate(id);
 
     if (!isUserIdValid) {
@@ -38,7 +38,7 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    const user = await this.findOneUser(id);
+    const user = await this.findUserById(id);
 
     return this.getResponseData(user);
   }
@@ -50,7 +50,7 @@ export class UsersService {
   }
 
   async update(id: string, { newPassword, oldPassword }: UpdateUserPassDto) {
-    const { password } = await this.findOneUser(id);
+    const { password } = await this.findUserById(id);
 
     if (oldPassword !== password) {
       throw new ForbiddenException('Invalid user password');
@@ -64,13 +64,9 @@ export class UsersService {
   }
 
   async remove(id: string) {
-    const isUserExists = await this.findOneUser(id);
+    const user = await this.findUserById(id);
 
-    if (!isUserExists) {
-      throw new BadRequestException(`User with ${id} not found`);
-    }
-
-    return await this.database.removeUser(id);
+    return await this.database.removeUser(user.id);
   }
 
   getResponseData(dto: Partial<User>) {

@@ -43,12 +43,22 @@ export class TracksService {
   }
 
   async remove(id: string) {
-    const isUserExists = await this.findOne(id);
+    const track = await this.findOne(id);
 
-    if (!isUserExists) {
-      throw new BadRequestException(`Track with ${id} not found`);
-    }
+    return await this.database.removeTrack(track.id);
+  }
 
-    return await this.database.removeTrack(id);
+  async removeAlbumId(albumId: string) {
+    return new Promise(async (res) => {
+      const tracks = await this.database.findAllTracks();
+
+      tracks.forEach((track) => {
+        if (track.albumId === albumId) {
+          this.database.updateTrack(track.id, { albumId: null });
+        }
+      });
+
+      res(true);
+    });
   }
 }

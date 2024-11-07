@@ -43,15 +43,11 @@ export class ArtistsService {
   }
 
   async remove(id: string) {
-    const isUserExists = await this.findOne(id);
-
-    if (!isUserExists) {
-      throw new BadRequestException(`Artist with ${id} not found`);
-    }
+    const artist = await this.findOne(id);
 
     // TODO: should set track.artistId to null after deletion
     // TODO: should set album.artistId to null after deletion
 
-    return await this.database.removeArtist(id);
+    return await this.database.removeArtist(artist.id);
   }
 }

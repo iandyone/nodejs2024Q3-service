@@ -39,9 +39,9 @@ export class TracksController {
   @UsePipes(new ValidationPipe())
   async update(
     @Param('id') id: string,
-    @Body() updateArtistDto: UpdateTrackDto,
+    @Body() updateTrackDto: UpdateTrackDto,
   ) {
-    return await this.tracksService.update(id, updateArtistDto);
+    return await this.tracksService.update(id, updateTrackDto);
   }
 
   @Delete(':id')

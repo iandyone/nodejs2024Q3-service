@@ -1,10 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import { CreateAlbumDto } from 'src/models/album/create-album.dto';
+import { UpdateAlbumDto } from 'src/models/album/update-album.dto';
 import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
 import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
 import { CreateTrackDto } from 'src/models/track/create-track.dto';
 import { UpdateTrackDto } from 'src/models/track/update-track.dto';
 import { CreateUserDto } from 'src/models/user/create-user.dto';
-import { Artist, Track, User } from 'src/types';
+import { Album, Artist, Track, User } from 'src/types';
 import * as uuid from 'uuid';
 
 @Injectable()
@@ -43,18 +45,33 @@ export class DatabaseService {
 
   private tracks: Track[] = [
     {
-      id: uuid.v4(),
+      id: '126d1bd6-71fd-4a81-b58b-5b4cad117322',
       name: 'Track name 1',
       duration: 120,
       albumId: uuid.v4(),
       artistId: this.artists[0].id,
     },
     {
-      id: uuid.v4(),
+      id: '8e90b535-1685-42ac-a40d-bc9d692e941d',
       name: 'Track name 2',
       duration: 173,
       albumId: uuid.v4(),
       artistId: this.artists[1].id,
+    },
+  ];
+
+  private albums: Album[] = [
+    {
+      id: '126d1bd6-71fd-4a81-b58b-5b4cad117322',
+      name: 'Album name 1',
+      artistId: this.artists[0].id,
+      year: 1997,
+    },
+    {
+      id: '8e90b535-1685-42ac-a40d-bc9d692e941d',
+      name: 'Album name 2',
+      artistId: this.artists[1].id,
+      year: 1997,
     },
   ];
 
@@ -209,6 +226,55 @@ export class DatabaseService {
   async removeTrack(id: string): Promise<string> {
     return new Promise((res) => {
       this.tracks = this.tracks.filter((track) => track.id !== id);
+
+      res(id);
+    });
+  }
+
+  // Albums handlers
+
+  async findAllAlbums(): Promise<Album[]> {
+    return new Promise((res) => res(this.albums));
+  }
+
+  async findAlbum(id: string): Promise<Album> {
+    return await new Promise((res) => {
+      const album = this.albums.find((album) => album.id === id);
+
+      res(album);
+    });
+  }
+
+  async createAlbum(dto: CreateAlbumDto): Promise<Album> {
+    return new Promise((res) => {
+      const album: Album = {
+        id: uuid.v4(),
+        ...dto,
+      };
+
+      this.albums.push(album);
+
+      res(album);
+    });
+  }
+
+  async updateAlbum(id: string, dto: UpdateAlbumDto): Promise<Album> {
+    return new Promise(async (res) => {
+      const album: Album = await this.findAlbum(id);
+
+      for (const key in dto) {
+        if (key !== 'id') {
+          album[key] = dto[key];
+        }
+      }
+
+      res(album);
+    });
+  }
+
+  async removeAlbum(id: string): Promise<string> {
+    return new Promise((res) => {
+      this.albums = this.albums.filter((album) => album.id !== id);
 
       res(id);
     });
