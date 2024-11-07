@@ -7,10 +7,16 @@ import { DatabaseService } from '../database/database.service';
 import * as uuid from 'uuid';
 import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
 import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
+import { TracksService } from '../tracks/tracks.service';
+import { AlbumsService } from '../albums/albums.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(
+    private readonly database: DatabaseService,
+    private readonly tracksService: TracksService,
+    private readonly albumsService: AlbumsService,
+  ) {}
 
   async findOne(id: string) {
     const isArtistIdValid = uuid.validate(id);
@@ -45,8 +51,8 @@ export class ArtistsService {
   async remove(id: string) {
     const artist = await this.findOne(id);
 
-    // TODO: should set track.artistId to null after deletion
-    // TODO: should set album.artistId to null after deletion
+    await this.tracksService.removeArtistId(id);
+    await this.albumsService.removeArtistId(id);
 
     return await this.database.removeArtist(artist.id);
   }

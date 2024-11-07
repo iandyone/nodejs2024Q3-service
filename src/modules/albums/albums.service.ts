@@ -53,4 +53,18 @@ export class AlbumsService {
 
     return await this.database.removeAlbum(album.id);
   }
+
+  async removeArtistId(artistId: string) {
+    return new Promise(async (res) => {
+      const albums = await this.database.findAllAlbums();
+
+      albums.forEach((track) => {
+        if (track.artistId === artistId) {
+          this.database.updateAlbum(track.id, { artistId: null });
+        }
+      });
+
+      res(true);
+    });
+  }
 }

@@ -61,4 +61,17 @@ export class TracksService {
       res(true);
     });
   }
+  async removeArtistId(artistId: string) {
+    return new Promise(async (res) => {
+      const tracks = await this.database.findAllTracks();
+
+      tracks.forEach((track) => {
+        if (track.artistId === artistId) {
+          this.database.updateTrack(track.id, { artistId: null });
+        }
+      });
+
+      res(true);
+    });
+  }
 }
