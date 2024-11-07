@@ -1,7 +1,8 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateTrackDto } from '../../models/track/create-track.dto';
 import { UpdateTrackDto } from '../../models/track/update-track.dto';
@@ -20,7 +21,7 @@ export class TracksService {
     return await this.database.findAllTracks();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, httpStatus = HttpStatus.NOT_FOUND) {
     const isTrackIdValid = uuid.validate(id);
 
     if (!isTrackIdValid) {
@@ -30,7 +31,7 @@ export class TracksService {
     const track = await this.database.findTrack(id);
 
     if (!track) {
-      throw new NotFoundException(`Track with id ${id} not found`);
+      throw new HttpException(`Track with id ${id} not found`, httpStatus);
     }
 
     return track;
@@ -73,5 +74,14 @@ export class TracksService {
 
       res(true);
     });
+  }
+
+  async findFavorites() {
+    const favorites = (await this.database.findAllFavorites()).tracks;
+    const tracks = await this.findAll();
+
+    return favorites
+      .map((id) => tracks.find((track) => track.id === id))
+      .filter(Boolean);
   }
 }

@@ -1,7 +1,8 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { CreateAlbumDto } from '../../models/album/create-album.dto';
 import { UpdateAlbumDto } from '../../models/album/update-album.dto';
@@ -24,7 +25,7 @@ export class AlbumsService {
     return await this.database.findAllAlbums();
   }
 
-  async findOne(id: string) {
+  async findOne(id: string, httpStatus = HttpStatus.NOT_FOUND) {
     const isAlbumIdValid = uuid.validate(id);
 
     if (!isAlbumIdValid) {
@@ -34,7 +35,7 @@ export class AlbumsService {
     const album = await this.database.findAlbum(id);
 
     if (!album) {
-      throw new NotFoundException(`Album with id ${id} not found`);
+      throw new HttpException(`Album with id ${id} not found`, httpStatus);
     }
 
     return album;
@@ -66,5 +67,14 @@ export class AlbumsService {
 
       res(true);
     });
+  }
+
+  async findFavorites() {
+    const favorites = (await this.database.findAllFavorites()).albums;
+    const albums = await this.findAll();
+
+    return favorites
+      .map((id) => albums.find((album) => album.id === id))
+      .filter(Boolean);
   }
 }

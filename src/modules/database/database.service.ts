@@ -6,7 +6,7 @@ import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
 import { CreateTrackDto } from 'src/models/track/create-track.dto';
 import { UpdateTrackDto } from 'src/models/track/update-track.dto';
 import { CreateUserDto } from 'src/models/user/create-user.dto';
-import { Album, Artist, Track, User } from 'src/types';
+import { Album, Artist, Favorites, Track, User } from 'src/types';
 import * as uuid from 'uuid';
 
 @Injectable()
@@ -62,18 +62,24 @@ export class DatabaseService {
 
   private albums: Album[] = [
     {
-      id: '126d1bd6-71fd-4a81-b58b-5b4cad117322',
+      id: '13b12770-f53d-478e-9f9b-b3ce77dcb316',
       name: 'Album name 1',
       artistId: this.artists[0].id,
       year: 1997,
     },
     {
-      id: '8e90b535-1685-42ac-a40d-bc9d692e941d',
+      id: 'a34be6de-a98c-4c13-be97-573d68ba4c6c',
       name: 'Album name 2',
       artistId: this.artists[1].id,
       year: 1997,
     },
   ];
+
+  private favorites: Favorites = {
+    albums: [this.albums[0].id],
+    artists: [this.artists[0].id],
+    tracks: [this.tracks[0].id],
+  };
 
   // User handlers
 
@@ -278,5 +284,50 @@ export class DatabaseService {
 
       res(id);
     });
+  }
+
+  // Favorites handlers
+
+  async findAllFavorites(): Promise<Favorites> {
+    return this.favorites;
+  }
+
+  async addFavoriteTrack(id: string) {
+    this.favorites.tracks.push(id);
+    return id;
+  }
+
+  async addFavoriteArtist(id: string) {
+    this.favorites.artists.push(id);
+    return id;
+  }
+
+  async addFavoriteAlbum(id: string) {
+    this.favorites.albums.push(id);
+    return id;
+  }
+
+  async removeFavoriteTrack(id: string) {
+    if (id) {
+      this.favorites.tracks = this.favorites.tracks.filter(
+        (favoriteId) => favoriteId !== id,
+      );
+    }
+  }
+
+  async removeFavoriteArtist(id: string) {
+    if (id) {
+      this.favorites.artists = this.favorites.artists.filter(
+        (favoriteId) => favoriteId !== id,
+      );
+    }
+  }
+
+  async removeFavoriteAlbum(id: string) {
+    if (id) {
+      this.favorites.albums = this.favorites.albums.filter(
+        (favoriteId) => favoriteId !== id,
+      );
+    }
   }
 }

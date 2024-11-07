@@ -1,7 +1,8 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
-  NotFoundException,
 } from '@nestjs/common';
 import { DatabaseService } from '../database/database.service';
 import * as uuid from 'uuid';
@@ -18,7 +19,7 @@ export class ArtistsService {
     private readonly albumsService: AlbumsService,
   ) {}
 
-  async findOne(id: string) {
+  async findOne(id: string, httpStatus = HttpStatus.NOT_FOUND) {
     const isArtistIdValid = uuid.validate(id);
 
     if (!isArtistIdValid) {
@@ -28,7 +29,7 @@ export class ArtistsService {
     const artist = await this.database.findArtist(id);
 
     if (!artist) {
-      throw new NotFoundException(`Artist with id ${id} not found`);
+      throw new HttpException(`Artist with id ${id} not found`, httpStatus);
     }
 
     return artist;
@@ -55,5 +56,14 @@ export class ArtistsService {
     await this.albumsService.removeArtistId(id);
 
     return await this.database.removeArtist(artist.id);
+  }
+
+  async findFavorites() {
+    const favorites = (await this.database.findAllFavorites()).artists;
+    const artists = await this.findAll();
+
+    return favorites
+      .map((id) => artists.find((artist) => artist.id === id))
+      .filter(Boolean);
   }
 }
