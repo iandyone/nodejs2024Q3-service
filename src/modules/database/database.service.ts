@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
 import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
+import { CreateTrackDto } from 'src/models/track/create-track.dto';
+import { UpdateTrackDto } from 'src/models/track/update-track.dto';
 import { CreateUserDto } from 'src/models/user/create-user.dto';
-import { Artist, User } from 'src/types';
+import { Artist, Track, User } from 'src/types';
 import * as uuid from 'uuid';
 
 @Injectable()
@@ -36,6 +38,23 @@ export class DatabaseService {
       id: 'f4b7d85d-8c5c-4dc6-a473-bdc8944187b4',
       name: 'artist2',
       grammy: false,
+    },
+  ];
+
+  private tracks: Track[] = [
+    {
+      id: uuid.v4(),
+      name: 'Track name 1',
+      duration: 120,
+      albumId: uuid.v4(),
+      artistId: this.artists[0].id,
+    },
+    {
+      id: uuid.v4(),
+      name: 'Track name 2',
+      duration: 173,
+      albumId: uuid.v4(),
+      artistId: this.artists[1].id,
     },
   ];
 
@@ -141,6 +160,55 @@ export class DatabaseService {
   async removeArtist(id: string): Promise<string> {
     return new Promise((res) => {
       this.artists = this.artists.filter((artist) => artist.id !== id);
+
+      res(id);
+    });
+  }
+
+  // Tracks handlers
+
+  async findAllTracks(): Promise<Track[]> {
+    return new Promise((res) => res(this.tracks));
+  }
+
+  async findTrack(id: string): Promise<Track> {
+    return await new Promise((res) => {
+      const track = this.tracks.find((track) => track.id === id);
+
+      res(track);
+    });
+  }
+
+  async createTrack(dto: CreateTrackDto): Promise<Track> {
+    return new Promise((res) => {
+      const track: Track = {
+        id: uuid.v4(),
+        ...dto,
+      };
+
+      this.tracks.push(track);
+
+      res(track);
+    });
+  }
+
+  async updateTrack(id: string, dto: UpdateTrackDto): Promise<Track> {
+    return new Promise(async (res) => {
+      const track = await this.findTrack(id);
+
+      for (const key in dto) {
+        if (key !== 'id') {
+          track[key] = dto[key];
+        }
+      }
+
+      res(track);
+    });
+  }
+
+  async removeTrack(id: string): Promise<string> {
+    return new Promise((res) => {
+      this.tracks = this.tracks.filter((track) => track.id !== id);
 
       res(id);
     });

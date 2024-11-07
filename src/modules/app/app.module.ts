@@ -5,11 +5,13 @@ import { ConfigModule } from '@nestjs/config';
 import { UsersModule } from 'src/modules/users/users.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
 import { ArtistsModule } from '../artists/artists.module';
+import { TracksModule } from 'src/modules/tracks/tracks.module';
 
 @Module({
   imports: [
     UsersModule,
     ArtistsModule,
+    TracksModule,
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,
