@@ -12,22 +12,10 @@ import { User } from 'src/types';
 import * as uuid from 'uuid';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   constructor(private readonly database: DatabaseService) {}
 
-  async getAll() {
-    const users = await this.database.getAllUsers();
-
-    return users.map((user) => this.getResponseData(user));
-  }
-
-  async getUser(id: string) {
-    const user = await this.getUserById(id);
-
-    return this.getResponseData(user);
-  }
-
-  async getUserById(id: string) {
+  async findOneUser(id: string) {
     const isUserIdValid = uuid.validate(id);
 
     if (!isUserIdValid) {
@@ -43,17 +31,26 @@ export class UserService {
     return user;
   }
 
-  async createUser(dto: CreateUserDto) {
+  async findAll() {
+    const users = await this.database.findAllUsers();
+
+    return users.map((user) => this.getResponseData(user));
+  }
+
+  async findOne(id: string) {
+    const user = await this.findOneUser(id);
+
+    return this.getResponseData(user);
+  }
+
+  async create(dto: CreateUserDto) {
     const userDto = await this.database.createUser(dto);
 
     return this.getResponseData(userDto);
   }
 
-  async updateUserPassword(
-    id: string,
-    { newPassword, oldPassword }: UpdateUserPassDto,
-  ) {
-    const { password } = await this.getUserById(id);
+  async update(id: string, { newPassword, oldPassword }: UpdateUserPassDto) {
+    const { password } = await this.findOneUser(id);
 
     if (oldPassword !== password) {
       throw new ForbiddenException('Invalid user password');
@@ -66,14 +63,14 @@ export class UserService {
     return this.getResponseData(userDto);
   }
 
-  async deleteUser(id: string) {
-    const isUserExists = await this.getUserById(id);
+  async remove(id: string) {
+    const isUserExists = await this.findOneUser(id);
 
     if (!isUserExists) {
       throw new BadRequestException(`User with ${id} not found`);
     }
 
-    return await this.database.deleteUser(id);
+    return await this.database.removeUser(id);
   }
 
   getResponseData(dto: Partial<User>) {

@@ -2,14 +2,14 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
-import { UserModule } from 'src/modules/user/user.module';
+import { UsersModule } from 'src/modules/users/users.module';
 import { DatabaseModule } from 'src/modules/database/database.module';
-import { ArtistModule } from '../artist/artist.module';
+import { ArtistsModule } from '../artists/artists.module';
 
 @Module({
   imports: [
-    UserModule,
-    ArtistModule,
+    UsersModule,
+    ArtistsModule,
     DatabaseModule,
     ConfigModule.forRoot({
       isGlobal: true,

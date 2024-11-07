@@ -9,14 +9,10 @@ import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
 import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
 
 @Injectable()
-export class ArtistService {
+export class ArtistsService {
   constructor(private readonly database: DatabaseService) {}
 
-  async getAll() {
-    return await this.database.getAllArtists();
-  }
-
-  async getArtistById(id: string) {
+  async findOne(id: string) {
     const isArtistIdValid = uuid.validate(id);
 
     if (!isArtistIdValid) {
@@ -32,18 +28,22 @@ export class ArtistService {
     return artist;
   }
 
-  async createArtist(dto: CreateArtistDto) {
+  async findAll() {
+    return await this.database.findAllArtists();
+  }
+
+  async create(dto: CreateArtistDto) {
     return await this.database.createArtist(dto);
   }
 
-  async updateArtist(id: string, dto: UpdateArtistDto) {
-    const artist = await this.getArtistById(id);
+  async update(id: string, dto: UpdateArtistDto) {
+    const artist = await this.findOne(id);
 
     return await this.database.updateArtist(artist.id, dto);
   }
 
-  async deleteArtist(id: string) {
-    const isUserExists = await this.getArtistById(id);
+  async remove(id: string) {
+    const isUserExists = await this.findOne(id);
 
     if (!isUserExists) {
       throw new BadRequestException(`Artist with ${id} not found`);
@@ -52,6 +52,6 @@ export class ArtistService {
     // TODO: should set track.artistId to null after deletion
     // TODO: should set album.artistId to null after deletion
 
-    return await this.database.deleteArtist(id);
+    return await this.database.removeArtist(id);
   }
 }

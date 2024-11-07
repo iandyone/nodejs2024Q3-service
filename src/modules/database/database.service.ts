@@ -39,7 +39,9 @@ export class DatabaseService {
     },
   ];
 
-  async getAllUsers(): Promise<User[]> {
+  // User handlers
+
+  async findAllUsers(): Promise<User[]> {
     return await new Promise((res) => res(this.users));
   }
 
@@ -85,7 +87,7 @@ export class DatabaseService {
     });
   }
 
-  async deleteUser(id: string): Promise<string> {
+  async removeUser(id: string): Promise<string> {
     return new Promise((res) => {
       this.users = this.users.filter((user) => user.id !== id);
 
@@ -93,7 +95,9 @@ export class DatabaseService {
     });
   }
 
-  async getAllArtists(): Promise<Artist[]> {
+  // Artist handlers
+
+  async findAllArtists(): Promise<Artist[]> {
     return new Promise((res) => {
       res(this.artists);
     });
@@ -134,7 +138,7 @@ export class DatabaseService {
     });
   }
 
-  async deleteArtist(id: string): Promise<string> {
+  async removeArtist(id: string): Promise<string> {
     return new Promise((res) => {
       this.artists = this.artists.filter((artist) => artist.id !== id);
 
