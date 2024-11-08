@@ -58,8 +58,6 @@ export class FavoritesService {
   }
 
   async removeAlbum(id: string) {
-    console.log(id);
-
     return this.database.removeFavoriteAlbum(id);
   }
 }
