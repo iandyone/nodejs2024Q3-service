@@ -1,12 +1,5 @@
 openapi: 3.0.0
 paths:
-  /:
-    get:
-      operationId: AppController_getHello
-      parameters: []
-      responses:
-        "200":
-          description: ""
   /user:
     get:
       operationId: UsersController_findAll
@@ -320,8 +313,10 @@ paths:
         "204":
           description: ""
 info:
-  title: API Documentation
-  description: API description for your NestJS project
+  title: Home Library Service
+  description: The Home Library Service is a REST API designed for managing users,
+    artists, tracks, albums, and favorites. Users can add and remove artists,
+    albums, and tracks to their own favorites list.
   version: "1.0"
   contact: {}
 tags: []

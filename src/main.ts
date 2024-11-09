@@ -9,15 +9,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('API Documentation')
-    .setDescription('API description for your NestJS project')
+    .setTitle('Home Library Service')
+    .setDescription(
+      'The Home Library Service is a REST API designed for managing users, artists, tracks, albums, and favorites. Users can add and remove artists, albums, and tracks to their own favorites list.',
+    )
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
 
   SwaggerModule.setup('api', app, document);
 
-  // Make an api.yaml file according the app
   const yamlString = YAML.stringify(document);
   fs.writeFileSync(
     path.resolve(__dirname, '../', 'doc', 'api.yaml'),
