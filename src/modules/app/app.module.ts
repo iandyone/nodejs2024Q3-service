@@ -6,6 +6,7 @@ import { ArtistsModule } from '../artists/artists.module';
 import { TracksModule } from 'src/modules/tracks/tracks.module';
 import { AlbumsModule } from '../albums/albums.module';
 import { FavoritesModule } from '../favorites/favorites.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { FavoritesModule } from '../favorites/favorites.module';
     AlbumsModule,
     FavoritesModule,
     DatabaseModule,
+    PrismaModule,
     ConfigModule.forRoot({
       isGlobal: true,
     }),

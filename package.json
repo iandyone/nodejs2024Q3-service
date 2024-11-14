@@ -20,7 +20,7 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "prisma-migrate-dev": "docker exec myApp npx prisma migrate dev"
+    "prisma-migrate-dev": "docker exec home-library-service npx prisma migrate dev"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

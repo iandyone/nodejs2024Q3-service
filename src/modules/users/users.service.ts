@@ -7,13 +7,27 @@ import {
 import { CreateUserDto } from 'src/models/user/create-user.dto';
 import { UserResponseDto } from 'src/models/user/user-response.dto';
 import { UpdateUserPassDto } from 'src/models/user/update-password.dto';
-import { DatabaseService } from 'src/modules/database/database.service';
 import { User } from 'src/types';
 import * as uuid from 'uuid';
+import { PrismaService } from '../prisma/prisma.service';
+import { User as UserPrisma } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly database: DatabaseService) {}
+  constructor(private readonly prisma: PrismaService) {}
+
+  getResponseData(dto: Partial<User>) {
+    const response = new UserResponseDto(dto);
+    return { ...response };
+  }
+
+  formatUser(data: UserPrisma) {
+    return {
+      ...data,
+      createdAt: data.createdAt.getTime(),
+      updatedAt: data.updatedAt.getTime(),
+    };
+  }
 
   async findUserById(id: string) {
     const isUserIdValid = uuid.validate(id);
@@ -22,17 +36,24 @@ export class UsersService {
       throw new BadRequestException('User id is now a valid uuid');
     }
 
-    const user = await this.database.findUser(id);
+    const data = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!user) {
+    if (!data) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
+
+    const user = {
+      ...data,
+      createdAt: data.createdAt.getTime(),
+      updatedAt: data.updatedAt.getTime(),
+    };
 
     return user;
   }
 
   async findAll() {
-    const users = await this.database.findAllUsers();
+    const userData = await this.prisma.user.findMany();
+    const users = userData.map((user) => this.formatUser(user));
 
     return users.map((user) => this.getResponseData(user));
   }
@@ -44,33 +65,36 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto) {
-    const userDto = await this.database.createUser(dto);
+    const userData = await this.prisma.user.create({
+      data: { ...dto, version: 1 },
+    });
 
-    return this.getResponseData(userDto);
+    const user = this.formatUser(userData);
+
+    return this.getResponseData(user);
   }
 
   async update(id: string, { newPassword, oldPassword }: UpdateUserPassDto) {
-    const { password } = await this.findUserById(id);
+    const { password, version } = await this.findUserById(id);
 
     if (oldPassword !== password) {
       throw new ForbiddenException('Invalid user password');
     }
 
-    const userDto = await this.database.updateUser(id, {
-      password: newPassword,
+    const userData = await this.prisma.user.update({
+      where: { id },
+      data: { password: newPassword, version: version + 1 },
     });
 
-    return this.getResponseData(userDto);
+    const user = this.formatUser(userData);
+
+    return this.getResponseData(user);
   }
 
   async remove(id: string) {
     const user = await this.findUserById(id);
+    await this.prisma.user.delete({ where: { id } });
 
-    return await this.database.removeUser(user.id);
-  }
-
-  getResponseData(dto: Partial<User>) {
-    const response = new UserResponseDto(dto);
-    return { ...response };
+    return user.id;
   }
 }
