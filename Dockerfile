@@ -12,4 +12,6 @@ EXPOSE $PORT
 
 COPY . .
 
+RUN npx prisma generate
+
 ENTRYPOINT [ "npm", "run", "start:dev" ]
