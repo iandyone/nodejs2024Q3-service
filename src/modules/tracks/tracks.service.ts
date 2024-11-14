@@ -117,14 +117,4 @@ export class TracksService {
       where: { artistId },
     });
   }
-
-  // TODO: add prisma
-  async findFavorites() {
-    const favorites = (await this.database.findAllFavorites()).tracks;
-    const tracks = await this.findAll();
-
-    return favorites
-      .map((id) => tracks.find((track) => track.id === id))
-      .filter(Boolean);
-  }
 }

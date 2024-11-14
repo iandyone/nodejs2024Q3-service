@@ -36,16 +36,16 @@ export class UsersService {
       throw new BadRequestException('User id is now a valid uuid');
     }
 
-    const data = await this.prisma.user.findUnique({ where: { id } });
+    const userData = await this.prisma.user.findUnique({ where: { id } });
 
-    if (!data) {
+    if (!userData) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
 
     const user = {
-      ...data,
-      createdAt: data.createdAt.getTime(),
-      updatedAt: data.updatedAt.getTime(),
+      ...userData,
+      createdAt: userData.createdAt.getTime(),
+      updatedAt: userData.updatedAt.getTime(),
     };
 
     return user;
@@ -93,6 +93,7 @@ export class UsersService {
 
   async remove(id: string) {
     const user = await this.findUserById(id);
+
     await this.prisma.user.delete({ where: { id } });
 
     return user.id;

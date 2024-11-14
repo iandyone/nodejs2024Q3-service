@@ -89,14 +89,4 @@ export class AlbumsService {
       data: { artistId: null },
     });
   }
-
-  // TODO: add prisma
-  async findFavorites() {
-    const favorites = (await this.database.findAllFavorites()).albums;
-    const albums = await this.findAll();
-
-    return favorites
-      .map((id) => albums.find((album) => album.id === id))
-      .filter(Boolean);
-  }
 }

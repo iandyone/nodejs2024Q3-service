@@ -62,14 +62,4 @@ export class ArtistsService {
 
     return await this.prisma.artist.delete({ where: { id: artist.id } });
   }
-
-  // TODO
-  async findFavorites() {
-    const favorites = (await this.database.findAllFavorites()).artists;
-    const artists = await this.findAll();
-
-    return favorites
-      .map((id) => artists.find((artist) => artist.id === id))
-      .filter(Boolean);
-  }
 }
