@@ -9,20 +9,18 @@ import { UpdateAlbumDto } from '../../models/album/update-album.dto';
 import { DatabaseService } from '../database/database.service';
 import * as uuid from 'uuid';
 import { TracksService } from '../tracks/tracks.service';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class AlbumsService {
   constructor(
     private readonly database: DatabaseService,
+    private readonly prisma: PrismaService,
     private readonly tracksService: TracksService,
   ) {}
 
-  async create(dto: CreateAlbumDto) {
-    return await this.database.createAlbum(dto);
-  }
-
   async findAll() {
-    return await this.database.findAllAlbums();
+    return await this.prisma.album.findMany();
   }
 
   async findOne(id: string, httpStatus = HttpStatus.NOT_FOUND) {
@@ -32,7 +30,7 @@ export class AlbumsService {
       throw new BadRequestException('Album id is now a valid uuid');
     }
 
-    const album = await this.database.findAlbum(id);
+    const album = await this.prisma.album.findUnique({ where: { id } });
 
     if (!album) {
       throw new HttpException(`Album with id ${id} not found`, httpStatus);
@@ -41,20 +39,49 @@ export class AlbumsService {
     return album;
   }
 
+  async create(dto: CreateAlbumDto) {
+    const artist = await this.prisma.artist.findUnique({
+      where: { id: dto.artistId },
+    });
+
+    if (!artist) {
+      throw new BadRequestException(`Artist with id ${dto.artistId} not found`);
+    }
+
+    return await this.prisma.album.create({ data: dto });
+  }
+
   async update(id: string, dto: UpdateAlbumDto) {
     const album = await this.findOne(id);
 
-    return await this.database.updateAlbum(album.id, dto);
+    if (dto.artistId) {
+      const artist = await this.prisma.artist.findUnique({
+        where: { id: dto.artistId },
+      });
+
+      if (!artist) {
+        throw new BadRequestException(
+          `Artist with id ${dto.artistId} not found`,
+        );
+      }
+    }
+
+    return await this.prisma.album.update({
+      where: { id: album.id },
+      data: dto,
+    });
   }
 
   async remove(id: string) {
     const album = await this.findOne(id);
 
-    await this.tracksService.removeAlbumId(id);
+    // TODO: add prisma
+    // await this.tracksService.removeAlbumId(id);
 
-    return await this.database.removeAlbum(album.id);
+    return await this.prisma.album.delete({ where: { id: album.id } });
   }
 
+  // TODO: add prisma
   async removeArtistId(artistId: string) {
     return new Promise(async (res) => {
       const albums = await this.database.findAllAlbums();
@@ -69,6 +96,7 @@ export class AlbumsService {
     });
   }
 
+  // TODO: add prisma
   async findFavorites() {
     const favorites = (await this.database.findAllFavorites()).albums;
     const albums = await this.findAll();
