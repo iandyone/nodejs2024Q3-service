@@ -57,9 +57,8 @@ export class ArtistsService {
   async remove(id: string) {
     const artist = await this.findOne(id);
 
-    // TODO: add reset artist id from track and album
-    // await this.tracksService.removeArtistId(id);
-    // await this.albumsService.removeArtistId(id);
+    await this.tracksService.removeArtistId(id);
+    await this.albumsService.removeArtistId(id);
 
     return await this.prisma.artist.delete({ where: { id: artist.id } });
   }

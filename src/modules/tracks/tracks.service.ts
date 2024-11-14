@@ -38,20 +38,28 @@ export class TracksService {
   }
 
   async create(dto: CreateTrackDto) {
-    const artist = await this.prisma.artist.findUnique({
-      where: { id: dto.artistId },
-    });
+    if (dto.artistId) {
+      const artist = await this.prisma.artist.findUnique({
+        where: { id: dto.artistId },
+      });
 
-    if (!artist) {
-      throw new BadRequestException(`Artist with id ${dto.artistId} not found`);
+      if (!artist) {
+        throw new BadRequestException(
+          `Artist with id ${dto.artistId} not found`,
+        );
+      }
     }
 
-    const album = await this.prisma.album.findUnique({
-      where: { id: dto.albumId },
-    });
+    if (dto.albumId) {
+      const album = await this.prisma.album.findUnique({
+        where: { id: dto.albumId },
+      });
 
-    if (!album) {
-      throw new BadRequestException(`Album  with id ${dto.albumId} not found`);
+      if (!album) {
+        throw new BadRequestException(
+          `Album  with id ${dto.albumId} not found`,
+        );
+      }
     }
 
     return await this.prisma.track.create({ data: dto });
@@ -96,33 +104,17 @@ export class TracksService {
     return await this.prisma.track.delete({ where: { id: track.id } });
   }
 
-  // TODO: add prisma
   async removeAlbumId(albumId: string) {
-    return new Promise(async (res) => {
-      const tracks = await this.database.findAllTracks();
-
-      tracks.forEach((track) => {
-        if (track.albumId === albumId) {
-          this.database.updateTrack(track.id, { albumId: null });
-        }
-      });
-
-      res(true);
+    return this.prisma.track.updateMany({
+      data: { albumId: null },
+      where: { albumId },
     });
   }
 
-  // TODO: add prisma
   async removeArtistId(artistId: string) {
-    return new Promise(async (res) => {
-      const tracks = await this.database.findAllTracks();
-
-      tracks.forEach((track) => {
-        if (track.artistId === artistId) {
-          this.database.updateTrack(track.id, { artistId: null });
-        }
-      });
-
-      res(true);
+    return this.prisma.track.updateMany({
+      data: { albumId: null },
+      where: { artistId },
     });
   }
 
