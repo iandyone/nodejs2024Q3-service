@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "bb528994-a49b-4c9a-9fe0-88b1c0e10e61",
+		"name": "Track",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18756960"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/track",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/track",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"track"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/track/d4def10d-828a-4984-a1e8-969bb7f880c5",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/track/d4def10d-828a-4984-a1e8-969bb7f880c5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"track",
+						"d4def10d-828a-4984-a1e8-969bb7f880c5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/track",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test track\",\n    \"duration\": 1,\n    \"albumId\": \"e99158af-fe64-4d0d-b154-05e4032f9795\",\n    \"artistId\": \"92e91531-5707-413f-a7d3-add0bfa9ada6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/track",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"track"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/track/126d1bd6-71fd-4a81-b58b-5b4cad117322",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"test track updated\",\n    \"duration\": 1,\n    \"albumId\": \"asdaf updated\",\n    \"artistId\": \"asd updated\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/track/126d1bd6-71fd-4a81-b58b-5b4cad117322",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"track",
+						"126d1bd6-71fd-4a81-b58b-5b4cad117322"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/track/126d1bd6-71fd-4a81-b58b-5b4cad117322",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/track/126d1bd6-71fd-4a81-b58b-5b4cad117322",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"track",
+						"126d1bd6-71fd-4a81-b58b-5b4cad117322"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
