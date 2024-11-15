@@ -1,0 +1,9 @@
+Dockerfile
+docker-compose.yml
+node_modules
+dist
+
+.vscode
+.git
+.env.example
+.gitignore
