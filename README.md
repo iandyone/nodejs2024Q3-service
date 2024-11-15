@@ -19,56 +19,86 @@ The API provides REST endpoints to work with the following resources:
 To run this project, ensure that you have:
 
 - Node.js (version 22.x or higher)
-- npm (version 6.x or higher)
+- Npm (version 6.x or higher)
+- Docker
 
-### Install Dependencies
+### Clone the repository
+
+Clone a repository using the following script
 
 ```bash
-npm install
+git clone https://github.com/iandyone/nodejs2024Q3-service.git
+```
+
+checkout to `home-library-part-2` branch
+
+```bash
+git checkout home-library-part-2
+```
+
+and install dependence
+
+```bash
+npm install 
 ```
 
 ### Environment Variables
 
-Create a `.env` file in the root directory of the project and add the following variable:
+Create a `.env` file in the root directory of the project and add the variables by example:
 
 ```env
 PORT=4000
+PORT_DB=5432
+
+POSTGRES_DB=home-library
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=root
+
+DATABASE_URL="postgresql://postgres:root@postgres:5432/home-library?schema=public"
 ```
 
-### Running the Service
+Warning: if you specify other values, be sure to update the database connection link `DATABASE_URL`
 
-To start the service, use the following command:
+### Start the app
+
+Start Docker if it wasn't already running and launch the application
 
 ```bash
-npm start
+docker compose up
 ```
 
-By default, the service will listen on port `4000`.
+The script will create a postgres database container based on the `postgres:16-alpine` image and run it. After that, Docker will create the application image, based on `Dockerfile` in the root directory. The application image will be run in a separate container, that will be connected to the database container. By default, the service will listen on port `4000`.
 
-### Running in Development Mode
+### Database migration
 
-To start the service in development mode with auto-reload (using `nodemon`):
+After running the application, you need to apply migrations to the postgres database inside the database container. To do this, open a new terminal tab and run the script:
 
 ```bash
-npm run dev
+npm run db:migrate
 ```
+Now the application is ready to go. Enjoy =)
 
 ### Testing
 
-This project includes unit and integration tests. To run the tests, run the app (in case if the application is not running)
-
-```bash
-npm start
-```
-
-and execute:
+To run tests, the application must be running and connected to the database. If this is done, the tests can be run by executing the script:
 
 ```bash
 npm test
 ```
+
 `NOTE: If one or more tests fail, please run the script again`
 
+### Vulnerability scanning 
+The application has the ability to scan images for vulnerabilities. To do this, you must be logged in docker service
 
+```bash
+docker login
+```
+
+Now you can scan the images. To do this, exec the script:
+```bash
+npm run scan
+```
 ## OpenAPI Documentation Generation
 
 API documentation is automatically generated and accessible at the following path after starting the service:
@@ -140,5 +170,4 @@ Each endpoint returns an appropriate HTTP status code. Example responses include
 
 ## Notes
 
-- All data is stored in memory, so any data will be lost when the service restarts.
 - Deleting an artist, album, or track automatically removes its `id` from favorites and sets `null` in any related records.
