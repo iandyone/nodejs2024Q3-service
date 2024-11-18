@@ -9,12 +9,15 @@ import {
   Put,
   UsePipes,
   ValidationPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from 'src/models/album/create-album.dto';
 import { UpdateAlbumDto } from 'src/models/album/update-album.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('album')
+@UseGuards(AuthGuard)
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 

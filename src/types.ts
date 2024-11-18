@@ -38,3 +38,8 @@ export interface FavoritesResponse {
   albums: Album[];
   tracks: Track[];
 }
+
+export interface TokenData {
+  id: string;
+  login: string;
+}

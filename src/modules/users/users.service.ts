@@ -8,20 +8,24 @@ import { CreateUserDto } from 'src/models/user/create-user.dto';
 import { UserResponseDto } from 'src/models/user/user-response.dto';
 import { UpdateUserPassDto } from 'src/models/user/update-password.dto';
 import { User } from 'src/types';
-import * as uuid from 'uuid';
 import { PrismaService } from '../prisma/prisma.service';
 import { User as UserPrisma } from '@prisma/client';
+import * as uuid from 'uuid';
+import { HashService } from '../hash/hash.service';
 
 @Injectable()
 export class UsersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly hashService: HashService,
+  ) {}
 
-  getResponseData(dto: Partial<User>) {
+  private getResponseData(dto: Partial<User>) {
     const response = new UserResponseDto(dto);
     return { ...response };
   }
 
-  formatUser(data: UserPrisma) {
+  private formatUser(data: UserPrisma) {
     return {
       ...data,
       createdAt: data.createdAt.getTime(),
@@ -29,7 +33,7 @@ export class UsersService {
     };
   }
 
-  async findUserById(id: string) {
+  private async findUserById(id: string) {
     const isUserIdValid = uuid.validate(id);
 
     if (!isUserIdValid) {
@@ -65,8 +69,10 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto) {
+    const passwordHash = await this.hashService.hash(dto.password);
+
     const userData = await this.prisma.user.create({
-      data: { ...dto, version: 1 },
+      data: { ...dto, password: passwordHash, version: 1 },
     });
 
     const user = this.formatUser(userData);
@@ -97,5 +103,11 @@ export class UsersService {
     await this.prisma.user.delete({ where: { id } });
 
     return user.id;
+  }
+
+  async isExists(login: string) {
+    return await this.prisma.user.findUnique({
+      where: { login },
+    });
   }
 }

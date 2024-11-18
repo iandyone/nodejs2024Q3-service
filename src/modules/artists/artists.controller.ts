@@ -7,13 +7,16 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from 'src/models/artist/create-artist.dto';
 import { UpdateArtistDto } from 'src/models/artist/update-artist.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('artist')
 export class ArtistsController {
   constructor(private readonly artistService: ArtistsService) {}

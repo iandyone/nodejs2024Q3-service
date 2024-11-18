@@ -9,12 +9,15 @@ import {
   UsePipes,
   ValidationPipe,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from '../../models/track/create-track.dto';
 import { UpdateTrackDto } from '../../models/track/update-track.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('track')
+@UseGuards(AuthGuard)
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
