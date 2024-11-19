@@ -8,16 +8,14 @@ import {
   Post,
   Put,
   UseGuards,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UpdateUserPassDto } from 'src/models/user/update-password.dto';
 import { CreateUserDto } from 'src/models/user/create-user.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('user')
 @UseGuards(AuthGuard)
+@Controller('user')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
 
@@ -31,15 +29,13 @@ export class UsersController {
     return await this.userService.findOne(id);
   }
 
-  @Post()
-  @UsePipes(new ValidationPipe())
   @HttpCode(201)
+  @Post()
   async create(@Body() createUserDto: CreateUserDto) {
     return await this.userService.create(createUserDto);
   }
 
   @Put(':id')
-  @UsePipes(new ValidationPipe())
   async update(
     @Param('id') id: string,
     @Body() updateUserPassDto: UpdateUserPassDto,

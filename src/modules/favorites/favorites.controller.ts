@@ -10,8 +10,8 @@ import {
 import { FavoritesService } from './favorites.service';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('favs')
 @UseGuards(AuthGuard)
+@Controller('favs')
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
@@ -24,10 +24,12 @@ export class FavoritesController {
   async addTrack(@Param('id') id: string) {
     return await this.favoritesService.addTrack(id);
   }
+
   @Post('artist/:id')
   async addArtist(@Param('id') id: string) {
     return await this.favoritesService.addArtist(id);
   }
+
   @Post('album/:id')
   async addAlbum(@Param('id') id: string) {
     return await this.favoritesService.addAlbum(id);

@@ -6,8 +6,6 @@ import {
   Param,
   Delete,
   HttpCode,
-  UsePipes,
-  ValidationPipe,
   Put,
   UseGuards,
 } from '@nestjs/common';
@@ -16,8 +14,8 @@ import { CreateTrackDto } from '../../models/track/create-track.dto';
 import { UpdateTrackDto } from '../../models/track/update-track.dto';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('track')
 @UseGuards(AuthGuard)
+@Controller('track')
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
@@ -31,15 +29,13 @@ export class TracksController {
     return await this.tracksService.findOne(id);
   }
 
-  @Post()
   @HttpCode(201)
-  @UsePipes(new ValidationPipe())
+  @Post()
   async create(@Body() createTrackDto: CreateTrackDto) {
     return await this.tracksService.create(createTrackDto);
   }
 
   @Put(':id')
-  @UsePipes(new ValidationPipe())
   async update(
     @Param('id') id: string,
     @Body() updateTrackDto: UpdateTrackDto,

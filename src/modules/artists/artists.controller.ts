@@ -31,15 +31,13 @@ export class ArtistsController {
     return await this.artistService.findOne(id);
   }
 
-  @Post()
   @HttpCode(201)
-  @UsePipes(new ValidationPipe())
+  @Post()
   async create(@Body() createArtistDto: CreateArtistDto) {
     return await this.artistService.create(createArtistDto);
   }
 
   @Put(':id')
-  @UsePipes(new ValidationPipe())
   async update(
     @Param('id') id: string,
     @Body() updateArtistDto: UpdateArtistDto,
@@ -47,8 +45,8 @@ export class ArtistsController {
     return await this.artistService.update(id, updateArtistDto);
   }
 
-  @Delete(':id')
   @HttpCode(204)
+  @Delete(':id')
   async remove(@Param('id') id: string) {
     return await this.artistService.remove(id);
   }
