@@ -1,9 +1,14 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { SignUpDto } from 'src/models/auth/signup.dto';
 import { UsersService } from '../users/users.service';
 import { HashService } from '../hash/hash.service';
 import { JwtService } from '@nestjs/jwt';
 import { TokenDto } from 'src/models/auth/token.dto';
+import { TokenData, TokenPayload, Tokens } from 'src/types';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +17,25 @@ export class AuthService {
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
   ) {}
+
+  private async createTokens({ userId, login }: TokenPayload): Promise<Tokens> {
+    const data = { userId, login };
+
+    const accessToken = await this.jwtService.signAsync(data, {
+      expiresIn: process.env.TOKEN_EXPIRE_TIME,
+      secret: process.env.JWT_SECRET_KEY,
+    });
+
+    const refreshToken = await this.jwtService.signAsync(data, {
+      expiresIn: process.env.TOKEN_REFRESH_EXPIRE_TIME,
+      secret: process.env.JWT_SECRET_REFRESH_KEY,
+    });
+
+    return {
+      accessToken,
+      refreshToken,
+    };
+  }
 
   async signup(credentials: SignUpDto) {
     const user = await this.userService.create(credentials);
@@ -37,15 +61,28 @@ export class AuthService {
 
     const accessTokenDto = new TokenDto(user);
 
-    return {
-      access_token: await this.jwtService.signAsync(
-        { ...accessTokenDto },
-        { secret: process.env.JWT_SECRET_KEY },
-      ),
-    };
+    return await this.createTokens({ ...accessTokenDto });
   }
 
-  async refresh() {
-    return true;
+  async refresh(token: string | undefined) {
+    if (!token) {
+      throw new UnauthorizedException('No refresh token passed');
+    }
+
+    try {
+      const isTokenValid = await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET_REFRESH_KEY,
+      });
+
+      if (!isTokenValid) {
+        throw new ForbiddenException('Invalid refresh token');
+      }
+
+      const dto = this.jwtService.decode(token) as TokenData;
+
+      return await this.createTokens({ ...dto });
+    } catch (error) {
+      throw new ForbiddenException(error);
+    }
   }
 }

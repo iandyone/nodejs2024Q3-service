@@ -1,11 +1,11 @@
-import { TokenData } from 'src/types';
+import { User } from '@prisma/client';
 
 export class TokenDto {
-  id: string;
+  userId: string;
   login: string;
 
-  constructor({ id, login }: TokenData) {
-    this.id = id;
+  constructor({ id, login }: User) {
+    this.userId = id;
     this.login = login;
   }
 }

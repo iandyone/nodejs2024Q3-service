@@ -16,10 +16,7 @@ import { JwtModule } from '@nestjs/jwt';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET_KEY,
-      signOptions: { expiresIn: process.env.TOKEN_EXPIRE_TIME },
-    }),
+    JwtModule,
     UsersModule,
     ArtistsModule,
     TracksModule,

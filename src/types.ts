@@ -40,6 +40,18 @@ export interface FavoritesResponse {
 }
 
 export interface TokenData {
-  id: string;
+  userId: string;
   login: string;
+}
+
+export interface Tokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
+export interface TokenPayload {
+  userId: string;
+  login: string;
+  iat?: number;
+  exp?: number;
 }

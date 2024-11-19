@@ -83,7 +83,12 @@ export class UsersService {
   async update(id: string, { newPassword, oldPassword }: UpdateUserPassDto) {
     const { password, version } = await this.findUserById(id);
 
-    if (oldPassword !== password) {
+    const isPasswordValid = await this.hashService.compare(
+      oldPassword,
+      password,
+    );
+
+    if (!isPasswordValid) {
       throw new ForbiddenException('Invalid user password');
     }
 

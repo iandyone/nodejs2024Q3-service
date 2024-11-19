@@ -7,7 +7,6 @@ export class HashService {
 
   constructor() {
     this.salt = Number(process.env.CRYPT_SALT) || 4;
-    console.log(process.env.CRYPT_SALT);
   }
 
   async hash(data: string) {
