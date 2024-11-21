@@ -36,12 +36,6 @@ checkout to `home-library-part-3` branch
 git checkout home-library-part-3
 ```
 
-and install dependencies
-
-```bash
-npm install
-```
-
 ### Environment Variables
 
 Create a `.env` file in the root directory of the project and add the variables by example:
@@ -84,8 +78,11 @@ Now the application is ready to go. Enjoy =)
 
 To run tests, the application must be running and connected to the database. After that you can start running tests.
 
-To run authentication tests, open a new terminal window and execute the following script
+To run authentication tests, open a new terminal window and execute the following scripts
 
+```bash
+npm install
+```
 ```bash
 npm run test:auth
 ```

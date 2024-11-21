@@ -1,6 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import { LoggingService } from 'src/modules/logging/logging.service';
+import { formatRequestLog } from 'src/utils';
 
 @Injectable()
 export class LoggerMiddleware implements NestMiddleware {
@@ -10,9 +11,7 @@ export class LoggerMiddleware implements NestMiddleware {
     const { method, body, query, baseUrl } = req;
     const startDate = Date.now();
 
-    this.loggingService.log(
-      this.formatRequestLog(method, baseUrl, body, query),
-    );
+    this.loggingService.log(formatRequestLog(method, baseUrl, body, query));
 
     res.on('finish', () => {
       const duration = Date.now() - startDate;
@@ -23,19 +22,6 @@ export class LoggerMiddleware implements NestMiddleware {
     });
 
     next();
-  }
-
-  private formatRequestLog(
-    method: string,
-    url: string,
-    body: any,
-    query: any,
-  ): string {
-    return `${method}: ${url} \nBODY: ${JSON.stringify(
-      body,
-      null,
-      2,
-    )} \nQUERY: ${JSON.stringify(query, null, 2)}`;
   }
 
   private formatResponseLog(statusCode: number, duration: number): string {

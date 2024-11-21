@@ -8,3 +8,4 @@ doc/postman
 .git
 .env.example
 .gitignore
+*.log

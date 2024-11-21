@@ -11,8 +11,8 @@ export class LoggingService implements LoggerService {
   private readonly logFileSize: number;
 
   constructor(private readonly configService: ConfigService) {
-    this.logLevel = Number(configService.get('')) || 0; // 0 - INFO, 1 - WARN, 2 - ERROR
-    this.logFileSize = Number(configService.get('LOG_FILE_MAX_SIZE')) || 10240;
+    this.logLevel = Number(configService.get('LOG_LVL')) || 0; // 0 - INFO, 1 - WARN, 2 - ERROR
+    this.logFileSize = Number(configService.get('LOG_FILE_SIZE_LIMIT')) || 2048;
     this.logsFilePath = path.resolve('logs', 'home-service.log');
     this.errorLogsFilePath = path.resolve('logs', 'errors.log');
 
