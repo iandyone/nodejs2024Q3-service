@@ -30,16 +30,16 @@ Clone a repository using the following script
 git clone https://github.com/iandyone/nodejs2024Q3-service.git
 ```
 
-checkout to `home-library-part-2` branch
+checkout to `home-library-part-3` branch
 
 ```bash
-git checkout home-library-part-2
+git checkout home-library-part-3
 ```
 
-and install dependence
+and install dependencies
 
 ```bash
-npm install 
+npm install
 ```
 
 ### Environment Variables
@@ -50,45 +50,56 @@ Create a `.env` file in the root directory of the project and add the variables 
 PORT=4000
 PORT_DB=5432
 
+LOG_LVL=0
+LOG_FILE_SIZE_LIMIT=2048
+
 POSTGRES_DB=home-library
 POSTGRES_USER=postgres
 POSTGRES_PASSWORD=root
 
-DATABASE_URL="postgresql://postgres:root@postgres:5432/home-library?schema=public"
-```
+DATABASE_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${PORT_DB}/${POSTGRES_DB}?schema=public"
 
-Warning: if you specify other values, be sure to update the database connection link `DATABASE_URL`
+CRYPT_SALT=3
+JWT_SECRET_KEY=my-awesome-access-secret
+JWT_SECRET_REFRESH_KEY=my-awesome-refresh-secret
+TOKEN_EXPIRE_TIME=1h
+TOKEN_REFRESH_EXPIRE_TIME=24h
+```
 
 ### Start the app
 
 Start Docker if it wasn't already running and launch the application
 
 ```bash
-docker compose up
+npm run compose:up
 ```
 
 The script will create a postgres database container based on the `postgres:16-alpine` image and run it. After that, Docker will create the application image, based on `Dockerfile` in the root directory. The application image will be run in a separate container, that will be connected to the database container. By default, the service will listen on port `4000`.
 
-### Database migration
+After all containers have been started, postgress database migrations will be automatically applied.
 
-After running the application, you need to apply migrations to the postgres database inside the database container. To do this, open a new terminal tab and run the script:
-
-```bash
-npm run db:migrate
-```
 Now the application is ready to go. Enjoy =)
 
 ### Testing
 
-To run tests, the application must be running and connected to the database. If this is done, the tests can be run by executing the script:
+To run tests, the application must be running and connected to the database. After that you can start running tests.
+
+To run authentication tests, open a new terminal window and execute the following script
 
 ```bash
-npm test
+npm run test:auth
 ```
 
 `NOTE: If one or more tests fail, please run the script again`
 
-### Vulnerability scanning 
+The application uses authorization based on access and refresh tokens. To run the tests, execute the following script
+
+```bash
+npm run test:refresh
+```
+
+### Vulnerability scanning
+
 The application has the ability to scan images for vulnerabilities. To do this, you must be logged in docker service
 
 ```bash
@@ -96,9 +107,11 @@ docker login
 ```
 
 Now you can scan the images. To do this, exec the script:
+
 ```bash
 npm run scan
 ```
+
 ## OpenAPI Documentation Generation
 
 API documentation is automatically generated and accessible at the following path after starting the service:
