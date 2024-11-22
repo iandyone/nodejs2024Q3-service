@@ -1,0 +1,135 @@
+{
+	"info": {
+		"_postman_id": "9bec380c-605c-4196-9e8c-d490d9d2db8a",
+		"name": "Artist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18756960"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/artist",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/artist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"artist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/artist/b32838d8-f14c-4341-931a-8fb016ec60ef",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/artist/b32838d8-f14c-4341-931a-8fb016ec60ef",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"artist",
+						"b32838d8-f14c-4341-931a-8fb016ec60ef"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/artist",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"artist3\",\n    \"grammy\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/artist",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"artist"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/artist/f4b7d85d-8c5c-4dc6-a473-bdc8944187b4",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    // \"name\": \"artist2-new\",\n    \"grammy\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/artist/f4b7d85d-8c5c-4dc6-a473-bdc8944187b4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"artist",
+						"f4b7d85d-8c5c-4dc6-a473-bdc8944187b4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/artist/f4b7d85d-8c5c-4dc6-a473-bdc8944187b4",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    // \"name\": \"artist2-new\",\n    \"grammy\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:4000/artist/f4b7d85d-8c5c-4dc6-a473-bdc8944187b4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"artist",
+						"f4b7d85d-8c5c-4dc6-a473-bdc8944187b4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

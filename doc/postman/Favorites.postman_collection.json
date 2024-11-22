@@ -1,0 +1,155 @@
+{
+	"info": {
+		"_postman_id": "3c7ed8d1-b4a9-4328-a777-04c9b16c7ddf",
+		"name": "Favorites",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18756960"
+	},
+	"item": [
+		{
+			"name": "http://localhost:4000/favs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/track/0584fbfa-8156-43f9-a4be-3006ba029f83",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/track/0584fbfa-8156-43f9-a4be-3006ba029f83",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"track",
+						"0584fbfa-8156-43f9-a4be-3006ba029f83"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/artist/01239949-de8a-4135-92de-9e5beca72843",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/artist/01239949-de8a-4135-92de-9e5beca72843",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"artist",
+						"01239949-de8a-4135-92de-9e5beca72843"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/album/6b4b2bc2-0d7b-42be-aa78-f28c3591e150",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/album/6b4b2bc2-0d7b-42be-aa78-f28c3591e150",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"album",
+						"6b4b2bc2-0d7b-42be-aa78-f28c3591e150"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/track/0584fbfa-8156-43f9-a4be-3006ba029f83",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/track/0584fbfa-8156-43f9-a4be-3006ba029f83",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"track",
+						"0584fbfa-8156-43f9-a4be-3006ba029f83"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/artist/01239949-de8a-4135-92de-9e5beca72843",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/artist/01239949-de8a-4135-92de-9e5beca72843",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"artist",
+						"01239949-de8a-4135-92de-9e5beca72843"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:4000/favs/album/6b4b2bc2-0d7b-42be-aa78-f28c3591e150",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:4000/favs/album/6b4b2bc2-0d7b-42be-aa78-f28c3591e150",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "4000",
+					"path": [
+						"favs",
+						"album",
+						"6b4b2bc2-0d7b-42be-aa78-f28c3591e150"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

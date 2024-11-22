@@ -1,0 +1,11 @@
+Dockerfile
+docker-compose.yml
+node_modules
+dist
+doc/postman
+
+.vscode
+.git
+.env.example
+.gitignore
+*.log
